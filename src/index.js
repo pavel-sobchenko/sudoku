@@ -3,11 +3,8 @@ module.exports = function solveSudoku(grid, row=0, col=0) {
   row = cell[0];
   col = cell[1];
 
-  // base case: if no empty cell  
   if (row == -1) {
-      console.log("solved");
-      grid.forEach((element) => console.log(element));
-      return true;
+      return grid;
   }
 
   for (var num = 1; num <= 9; num++) {
@@ -16,15 +13,12 @@ module.exports = function solveSudoku(grid, row=0, col=0) {
           grid[row][col] = num;
 
           if ( solveSudoku(grid, row, col) ) {                
-              return true;
+              return grid;
           }
 
-                  // mark cell as empty (with 0)    
           grid[row][col] = 0;
       }
   }
-
-  // trigger back tracking
   return false;
 }
 
@@ -42,16 +36,14 @@ function noConflicts(grid, row, col, num) {
 }
 
 function isRowOk(grid, row, num) {
-  for (var col = 0; col < 9; col++)
-      if (grid[row][col] == num)
-          return false;
+  if(grid[row].includes(num))
+      return false;
 
   return true;
 }
 function isColOk(grid, col, num) {
-  for (var row = 0; row < 9; row++)
-  if (grid[row][col] == num)
-      return false;
+  if(grid.map(el => {return el[col]}).includes(num))
+    return false
 
   return true;    
 }
@@ -65,16 +57,4 @@ function isBoxOk(grid, row, col, num) {
               return false;
 
   return true;
-}
-
-function printGrid(grid) {
-  var res = "";
-
-  for (var i = 0; i < 9; i++) {
-      for (var j = 0; j < 9; j++) {
-          res += grid[i][j];
-      }
-      res += "\n";
-  }
-  console.log(res);
 }
